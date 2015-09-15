@@ -5,7 +5,7 @@
 
 namespace Omnipay\Payconiq\Message;
 
-class CreateCardRequest extends AbstractRequest
+class CreateCustomerRequest extends AbstractRequest
 {
     public function getData()
     {

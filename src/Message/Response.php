@@ -41,7 +41,7 @@ class Response extends AbstractResponse
     }
 
     /**
-     * Get a card reference, for createCard or createCustomer requests.
+     * Get a card reference, for createCard or createCard requests.
      *
      * @return string|null
      */

@@ -9,13 +9,23 @@ use Guzzle\Common\Event;
 
 abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 {
-    protected $endpoint = 'http://172.17.15.88:8080/payconiq/v1';
-
     /**
      * Live or Test Endpoint URL
      *
      * @var string URL
      */
+    protected $endpoint = 'http://172.17.15.88:8080/payconiq/v1';
+
+    public function getPartnerId()
+    {
+        return $this->getParameter('partnerId');
+    }
+
+    public function setPartnerId($value)
+    {
+        return $this->setParameter('partnerId', $value);
+    }
+
     /**
      * Get the gateway API Key
      *
@@ -25,7 +35,6 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
     {
         return $this->getParameter('authorization');
     }
-
 
     /**
      * Set the gateway API Key
@@ -37,7 +46,10 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
         return $this->setParameter('authorization', $value);
     }
 
-    abstract public function getEndpoint();
+    public function getEndpoint()
+    {
+        return $this->endpoint.'/'.$this->getPartnerId();
+    }
 
     /**
      * Get HTTP Method.
@@ -80,4 +92,29 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
         return $this->response = new Response($this, $httpResponse->json());
     }
 
+
+    /**
+     * Get the card data.
+     *
+     * @return array
+     */
+    protected function getCardData()
+    {
+        $data = [];
+        $data['bankAccounts'] = [
+            'IBAN' => $this->getCard()->getNumber(),
+            'name' => 'Tabster',
+        ];
+        $data['firstName'] = $this->getCard()->getFirstName();
+        $data['lastName'] = $this->getCard()->getLastName();
+        $data['address'] = [
+            'street' => $this->getCard()->getAddress1(),
+            'no' => $this->getCard()->getAddress2(),
+            'postalCode' => $this->getCard()->getPostcode(),
+            'city' => $this->getCard()->getCity(),
+            'country' => $this->getCard()->getCountry(),
+        ];
+
+        return $data;
+    }
 }

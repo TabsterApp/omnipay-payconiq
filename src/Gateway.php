@@ -10,6 +10,7 @@ use Omnipay\Common\AbstractGateway;
 
 class Gateway extends AbstractGateway
 {
+
     public function getName()
     {
         return 'Payconiq';
@@ -18,9 +19,21 @@ class Gateway extends AbstractGateway
     public function getDefaultParameters()
     {
         return [
+            'partnerId' => '',
             'authorization' => '',
         ];
     }
+
+    public function getPartnerId()
+    {
+        return $this->getParameter('partnerId');
+    }
+
+    public function setPartnerId($value)
+    {
+        return $this->setParameter('partnerId', $value);
+    }
+
 
     public function getAuthorization()
     {

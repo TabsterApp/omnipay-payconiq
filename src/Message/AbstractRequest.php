@@ -48,7 +48,7 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 
     public function getEndpoint()
     {
-        return $this->endpoint.'/'.$this->getPartnerId();
+        return $this->endpoint.'/partners/'.$this->getPartnerId();
     }
 
     /**

@@ -9,7 +9,7 @@ class CreateCardRequest extends AbstractRequest
 {
     public function getData()
     {
-        $data = [];
+        $data = $this->getCardData();
 
 
         return $data;

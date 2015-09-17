@@ -15,6 +15,6 @@ class ValidateCardRequest extends AbstractRequest
 
     public function getEndpoint()
     {
-        return parent::getEndpoint() . '/customers/' . $this->getCardReference() . '/validate';
+        return parent::getEndpoint() . '/customers/' . $this->getCardReference() . '/sendVerificationCode';
     }
 }

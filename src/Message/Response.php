@@ -19,6 +19,13 @@ use Omnipay\Common\Message\RequestInterface;
 class Response extends AbstractResponse
 {
     private $headers = [];
+    const NOT_VALIDATED = 1;
+    const VALIDATED = 10;
+
+    static $CARD_STATUSES = [
+        'NOT_VALIDATED' => self::NOT_VALIDATED,
+        'VALIDATED' => self::VALIDATED,
+    ];
 
     public function __construct(RequestInterface $request, $data, $headers)
     {
@@ -49,8 +56,25 @@ class Response extends AbstractResponse
         return null;
     }
 
+
     /**
-     * Get a customerId
+     * Get card status
+     * @throws InvalidResponseException
+     * @return string
+     */
+    public function getCardStatus()
+    {
+        $data = $this->getData();
+        $cardStatus = $data['bankAccounts']['status'];
+        if (in_array($cardStatus, self::$CARD_STATUSES)) {
+            throw new InvalidResponseException('Invalid card status in response.');
+        }
+
+        return self::$CARD_STATUSES[$cardStatus];
+    }
+
+    /**
+     * Get a card reference
      * @throws InvalidResponseException
      * @return string
      */

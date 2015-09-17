@@ -63,4 +63,22 @@ class Gateway extends AbstractGateway
         return $this->createRequest('\Omnipay\Payconiq\Message\CreateCardRequest', $parameters);
     }
 
+    /**
+     * @param array $parameters
+     * @return \Omnipay\Payconiq\Message\FetchCardRequest
+     */
+    public function fetchCard(array $parameters = [])
+    {
+        return $this->createRequest('\Omnipay\Payconiq\Message\FetchCardRequest', $parameters);
+    }
+
+    /**
+     * @param array $parameters
+     * @return \Omnipay\Payconiq\Message\ValidateCardRequest
+     */
+    public function validateCard(array $parameters = [])
+    {
+        return $this->createRequest('\Omnipay\Payconiq\Message\ValidateCardRequest', $parameters);
+    }
+
 }

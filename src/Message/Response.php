@@ -47,13 +47,19 @@ class Response extends AbstractResponse
     /**
      * Get the transaction reference.
      *
-     * @return string|null
+     * @return string
      */
     public function getTransactionReference()
     {
-
-
-        return null;
+        if (!in_array('Location', $this->headers)) {
+            throw new InvalidResponseException('No Location header in response.');
+        }
+        $location = (string)$this->headers['Location'];
+        $transactionReference = preg_replace('#^.+?\/transactions\\/([^\/\s]+)#i', '$1', $location);
+        if (empty($transactionReference) || strpos('/', $transactionReference) !== false) {
+            throw new InvalidResponseException('No transaction id header in response.');
+        }
+        return $transactionReference;
     }
 
 
@@ -84,9 +90,9 @@ class Response extends AbstractResponse
             throw new InvalidResponseException('No Location header in response.');
         }
         $location = (string)$this->headers['Location'];
-        $cardReference = preg_replace('#^.+?\/customers\\/([a-z0-9]+)#i', '$1', $location);
+        $cardReference = preg_replace('#^.+?\/customers\\/([^\/\s]+)#i', '$1', $location);
         if (empty($cardReference) || strpos('/', $cardReference) !== false) {
-            throw new InvalidResponseException('No Location header in response.');
+            throw new InvalidResponseException('No customer id header in response.');
         }
         return $cardReference;
     }

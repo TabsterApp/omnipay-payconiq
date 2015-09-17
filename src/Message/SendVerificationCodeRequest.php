@@ -5,7 +5,7 @@
 
 namespace Omnipay\Payconiq\Message;
 
-class ValidateCardRequest extends AbstractRequest
+class SendVerificationCodeRequest extends AbstractRequest
 {
     public function getData()
     {
@@ -15,6 +15,6 @@ class ValidateCardRequest extends AbstractRequest
 
     public function getEndpoint()
     {
-        return parent::getEndpoint() . '/customers/' . $this->getCardReference() . '/validate';
+        return parent::getEndpoint() . '/customers/' . $this->getCardReference() . '/sendVerificationCode';
     }
 }

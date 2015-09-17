@@ -1,6 +1,6 @@
 <?php
 /**
- * Payconiq Create Credit Card Request
+ * Payconiq Create Customer Request
  */
 
 namespace Omnipay\Payconiq\Message;

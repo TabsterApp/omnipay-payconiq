@@ -5,7 +5,9 @@
 
 namespace Omnipay\Payconiq\Message;
 
+use Omnipay\Common\Exception\InvalidResponseException;
 use Omnipay\Common\Message\AbstractResponse;
+use Omnipay\Common\Message\RequestInterface;
 
 /**
  * Payconiq Response
@@ -16,6 +18,15 @@ use Omnipay\Common\Message\AbstractResponse;
  */
 class Response extends AbstractResponse
 {
+    private $headers = [];
+
+    public function __construct(RequestInterface $request, $data, $headers)
+    {
+        parent::__construct($request, $data);
+        $this->headers = $headers;
+    }
+
+
     /**
      * Is the transaction successful?
      *
@@ -23,7 +34,7 @@ class Response extends AbstractResponse
      */
     public function isSuccessful()
     {
-        return !isset($this->data['error']);
+        return !isset($this->data['code']);
     }
 
     /**
@@ -33,39 +44,27 @@ class Response extends AbstractResponse
      */
     public function getTransactionReference()
     {
-        if (isset($this->data['object']) && 'charge' === $this->data['object']) {
-            return $this->data['id'];
-        }
+
 
         return null;
     }
 
     /**
-     * Get a card reference, for createCard or createCard requests.
-     *
-     * @return string|null
+     * Get a customerId
+     * @throws InvalidResponseException
+     * @return string
      */
     public function getCardReference()
     {
-        if (isset($this->data['object']) && 'customer' === $this->data['object']) {
-            return $this->data['id'];
+        if (!in_array('Location', $this->headers)) {
+            throw new InvalidResponseException('No Location header in response.');
         }
-
-        return null;
-    }
-
-    /**
-     * Get a token, for createCard requests.
-     *
-     * @return string|null
-     */
-    public function getToken()
-    {
-        if (isset($this->data['object']) && 'token' === $this->data['object']) {
-            return $this->data['id'];
+        $location = (string)$this->headers['Location'];
+        $cardReference = preg_replace('#^.+?\/customers\\/([a-z0-9]+)#i', '$1', $location);
+        if (empty($cardReference) || strpos('/', $cardReference) !== false) {
+            throw new InvalidResponseException('No Location header in response.');
         }
-
-        return null;
+        return $cardReference;
     }
 
     /**
@@ -92,7 +91,7 @@ class Response extends AbstractResponse
     public function getMessage()
     {
         if (!$this->isSuccessful()) {
-            return $this->data['error']['message'];
+            return $this->data['message'];
         }
 
         return null;

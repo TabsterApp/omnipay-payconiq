@@ -48,7 +48,7 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 
     public function getEndpoint()
     {
-        return $this->endpoint.'/partners/'.$this->getPartnerId();
+        return $this->endpoint . '/partners/' . $this->getPartnerId();
     }
 
     /**
@@ -63,6 +63,17 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
         return 'POST';
     }
 
+    public function send()
+    {
+        $data = $this->getData();
+
+        return $this->sendData($data);
+    }
+
+    /**
+     * @param array $data
+     * @return Response
+     */
     public function sendData($data)
     {
         // don't throw exceptions for 4xx errors
@@ -85,11 +96,12 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
             null,
             $data
         );
+        /** @var \Guzzle\Http\Message\Response $httpResponse */
         $httpResponse = $httpRequest
             ->setHeader('Authorization', $this->getAuthorization())
             ->send();
 
-        return $this->response = new Response($this, $httpResponse->json());
+        return $this->response = new Response($this, $httpResponse->json(), $httpResponse->getHeaders());
     }
 
 

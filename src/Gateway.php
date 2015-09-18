@@ -20,7 +20,7 @@ class Gateway extends AbstractGateway
     {
         return [
             'partnerId' => '',
-            'authorization' => '',
+            'apiKey' => '',
         ];
     }
 
@@ -34,15 +34,21 @@ class Gateway extends AbstractGateway
         return $this->setParameter('partnerId', $value);
     }
 
-
-    public function getAuthorization()
+    /**
+     * @return string
+     */
+    public function getApiKey()
     {
-        return $this->getParameter('authorization');
+        return $this->getParameter('apiKey');
     }
 
-    public function setAuthorization($value)
+    /**
+     * @param  string $value
+     * @return $this
+     */
+    public function setApiKey($value)
     {
-        return $this->setParameter('authorization', $value);
+        return $this->setParameter('apiKey', $value);
     }
 
     /**

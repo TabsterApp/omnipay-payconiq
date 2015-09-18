@@ -5,6 +5,7 @@
 
 namespace Omnipay\Payconiq\Message;
 
+use Guzzle\Http\Message\Response as GuzzleResponse;
 use Omnipay\Common\Exception\InvalidResponseException;
 use Omnipay\Common\Message\AbstractResponse;
 use Omnipay\Common\Message\RequestInterface;
@@ -18,7 +19,10 @@ use Omnipay\Common\Message\RequestInterface;
  */
 class Response extends AbstractResponse
 {
-    private $headers = [];
+    /**
+     * @var GuzzleResponse
+     */
+    private $response;
     const NOT_VALIDATED = 1;
     const ACTIVE = 10;
 
@@ -27,10 +31,10 @@ class Response extends AbstractResponse
         'ACTIVE' => self::ACTIVE,
     ];
 
-    public function __construct(RequestInterface $request, $data, $headers)
+    public function __construct(RequestInterface $request, GuzzleResponse $response)
     {
-        parent::__construct($request, $data);
-        $this->headers = $headers;
+        parent::__construct($request, $response->json());
+        $this->response = $response;
     }
 
 
@@ -51,14 +55,12 @@ class Response extends AbstractResponse
      */
     public function getTransactionReference()
     {
-        if (!in_array('Location', $this->headers)) {
-            throw new InvalidResponseException('No Location header in response.');
-        }
-        $location = (string)$this->headers['Location'];
+        $location = $this->getLocationHeader();
         $transactionReference = preg_replace('#^.+?\/transactions\\/([^\/\s]+)#i', '$1', $location);
         if (empty($transactionReference) || strpos('/', $transactionReference) !== false) {
             throw new InvalidResponseException('No transaction id header in response.');
         }
+
         return $transactionReference;
     }
 
@@ -86,29 +88,22 @@ class Response extends AbstractResponse
      */
     public function getCardReference()
     {
-        if (!in_array('Location', $this->headers)) {
-            throw new InvalidResponseException('No Location header in response.');
-        }
-        $location = (string)$this->headers['Location'];
+        $location = $this->getLocationHeader();
         $cardReference = preg_replace('#^.+?\/customers\\/([^\/\s]+)#i', '$1', $location);
         if (empty($cardReference) || strpos('/', $cardReference) !== false) {
             throw new InvalidResponseException('No customer id header in response.');
         }
+
         return $cardReference;
     }
 
-    /**
-     * Get the card data from the response.
-     *
-     * @return array|null
-     */
-    public function getCard()
+    private function getLocationHeader()
     {
-        if (isset($this->data['card'])) {
-            return $this->data['card'];
+        if (!$this->response->hasHeader('location')) {
+            throw new InvalidResponseException('No "Location" header in response.');
         }
 
-        return null;
+        return (string)$this->response->getHeader('location');
     }
 
     /**

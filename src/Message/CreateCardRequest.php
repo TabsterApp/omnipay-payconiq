@@ -9,8 +9,17 @@ class CreateCardRequest extends AbstractRequest
 {
     public function getData()
     {
-        $data = $this->getCardData();
-
+        $data = [
+            'firstName' => $this->getFirstName(),
+            'lastName' => $this->getLastName(),
+            'address' => $this->getAddress(),
+            'bankAccounts' => [
+                [
+                    'IBAN' => $this->getAccountNumber(),
+                    'name' => 'Tabster',
+                ],
+            ],
+        ];
 
         return $data;
     }

@@ -20,11 +20,11 @@ class Response extends AbstractResponse
 {
     private $headers = [];
     const NOT_VALIDATED = 1;
-    const VALIDATED = 10;
+    const ACTIVE = 10;
 
     static $CARD_STATUSES = [
         'NOT_VALIDATED' => self::NOT_VALIDATED,
-        'VALIDATED' => self::VALIDATED,
+        'ACTIVE' => self::ACTIVE,
     ];
 
     public function __construct(RequestInterface $request, $data, $headers)

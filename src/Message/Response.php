@@ -24,6 +24,7 @@ class Response extends AbstractResponse
      */
     private $response;
     const NOT_VALIDATED = 1;
+    const BLOCKED = 2;
     const ACTIVE = 10;
 
     static $CARD_STATUSES = [

@@ -25,11 +25,12 @@ class Response extends AbstractResponse
     private $response;
     const NOT_VALIDATED = 1;
     const BLOCKED = 2;
-    const ACTIVE = 10;
+    const VALIDATED = 10;
 
     static $CARD_STATUSES = [
         'NOT_VALIDATED' => self::NOT_VALIDATED,
-        'ACTIVE' => self::ACTIVE,
+        'VALIDATED' => self::VALIDATED,
+        'BLOCKED' => self::BLOCKED,
     ];
 
     public function __construct(RequestInterface $request, GuzzleResponse $response)

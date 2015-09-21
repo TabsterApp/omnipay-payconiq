@@ -14,26 +14,11 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
      *
      * @var string URL
      */
-    protected $endpoint = 'http://172.17.15.88:8080/payconiq/v1';
-
-    public function getPartnerId()
-    {
-        return $this->getParameter('partnerId');
-    }
+    protected $endpoint = 'https://dev.payconiq.com/v1';
 
     public function setPartnerId($value)
     {
         return $this->setParameter('partnerId', $value);
-    }
-
-    /**
-     * Get the gateway API Key
-     *
-     * @return string
-     */
-    public function getApiKey()
-    {
-        return $this->getParameter('apiKey');
     }
 
     /**
@@ -46,11 +31,6 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
         return $this->setParameter('apiKey', $value);
     }
 
-    public function getEndpoint()
-    {
-        return $this->endpoint.'/partners/'.$this->getPartnerId();
-    }
-
     public function getFirstName()
     {
         return $this->getParameter('firstName');
@@ -59,6 +39,16 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
     public function setFirstName($value)
     {
         return $this->setParameter('firstName', $value);
+    }
+
+    public function getMandateType()
+    {
+        return $this->getParameter('mandateType');
+    }
+
+    public function setMandateType($value)
+    {
+        return $this->setParameter('mandateType', $value);
     }
 
     public function getLastName()
@@ -91,19 +81,6 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
         return $this->setParameter('accountNumber', $value);
     }
 
-
-    /**
-     * Get HTTP Method.
-     *
-     * This is nearly always POST but can be over-ridden in sub classes.
-     *
-     * @return string
-     */
-    public function getHttpMethod()
-    {
-        return 'POST';
-    }
-
     public function send()
     {
         $data = $this->getData();
@@ -111,11 +88,26 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
         return $this->sendData($data);
     }
 
+
+    /**
+     * Gets the test mode of the request from the gateway.
+     *
+     * @return boolean
+     */
+    public function getTestMode()
+    {
+        if ('https://dev.payconiq.com/v1' == $this->endpoint) {
+            return true;
+        }
+        return false;
+    }
+
+
     /**
      * @param array $data
      * @return Response
      */
-    public function sendData($data)
+    public function sendData($data, $noAuthorization = false, $extraHeaders = [])
     {
         // don't throw exceptions for 4xx errors
         $this->httpClient->getEventDispatcher()->addListener(
@@ -130,24 +122,63 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
                 }
             }
         );
-
+        $headers = [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ];
+        if (!$noAuthorization) {
+            $headers['Authorization'] = $this->getApiKey();
+        }
+        if (!empty($extraHeaders)) {
+            $headers += $extraHeaders;
+        }
         $httpRequest = $this->httpClient->createRequest(
             $this->getHttpMethod(),
             $this->getEndpoint(),
-            [
-                'Authorization' => $this->getApiKey(),
-                'Content-Type' => 'application/json',
-                'Accept' => 'application/json',
-
-            ],
+            $headers,
             json_encode($data)
         );
+        if ($this->getTestMode()) {
+            $httpRequest->getCurlOptions()->set(CURLOPT_SSL_VERIFYHOST, false);
+            $httpRequest->getCurlOptions()->set(CURLOPT_SSL_VERIFYPEER, false);
+        }
 
         /** @var \Guzzle\Http\Message\Response $httpResponse */
         $httpResponse = $httpRequest->send();
 
-
         return $this->response = new Response($this, $httpResponse);
+    }
+
+    /**
+     * Get HTTP Method.
+     *
+     * This is nearly always POST but can be over-ridden in sub classes.
+     *
+     * @return string
+     */
+    public function getHttpMethod()
+    {
+        return 'POST';
+    }
+
+    public function getEndpoint()
+    {
+        return $this->endpoint . '/partners/' . $this->getPartnerId();
+    }
+
+    public function getPartnerId()
+    {
+        return $this->getParameter('partnerId');
+    }
+
+    /**
+     * Get the gateway API Key
+     *
+     * @return string
+     */
+    public function getApiKey()
+    {
+        return $this->getParameter('apiKey');
     }
 
 

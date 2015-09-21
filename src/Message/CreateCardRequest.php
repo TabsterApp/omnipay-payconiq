@@ -26,6 +26,6 @@ class CreateCardRequest extends AbstractRequest
 
     public function getEndpoint()
     {
-        return parent::getEndpoint().'/customers';
+        return parent::getEndpoint() . '/customers';
     }
 }

@@ -89,6 +89,15 @@ class Gateway extends AbstractGateway
 
     /**
      * @param array $parameters
+     * @return \Omnipay\Payconiq\Message\MandatesRequest
+     */
+    public function mandates(array $parameters = [])
+    {
+        return $this->createRequest('\Omnipay\Payconiq\Message\MandatesRequest', $parameters);
+    }
+
+    /**
+     * @param array $parameters
      * @return \Omnipay\Payconiq\Message\ValidateCardRequest
      */
     public function validateCard(array $parameters = [])

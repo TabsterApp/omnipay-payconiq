@@ -71,6 +71,16 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
         return $this->setParameter('address', $value);
     }
 
+    public function getVerificationCode()
+    {
+        return $this->getParameter('verificationCode');
+    }
+
+    public function setVerificationCode($value)
+    {
+        return $this->setParameter('verificationCode', $value);
+    }
+
     public function getAccountNumber()
     {
         return $this->getParameter('accountNumber');
@@ -99,6 +109,7 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
         if ('https://dev.payconiq.com/v1' == $this->endpoint) {
             return true;
         }
+
         return false;
     }
 
@@ -136,7 +147,7 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
             $this->getHttpMethod(),
             $this->getEndpoint(),
             $headers,
-            json_encode($data)
+            !empty($data) ? json_encode($data) : null
         );
         if ($this->getTestMode()) {
             $httpRequest->getCurlOptions()->set(CURLOPT_SSL_VERIFYHOST, false);
@@ -163,7 +174,7 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 
     public function getEndpoint()
     {
-        return $this->endpoint . '/partners/' . $this->getPartnerId();
+        return $this->endpoint.'/partners/'.$this->getPartnerId();
     }
 
     public function getPartnerId()

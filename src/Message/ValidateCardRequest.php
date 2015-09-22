@@ -9,8 +9,9 @@ class ValidateCardRequest extends AbstractRequest
 {
     public function getData()
     {
+        $this->validate('verificationCode');
 
-        return [];
+        return ['verificationCode' => $this->getVerificationCode()];
     }
 
     public function getEndpoint()

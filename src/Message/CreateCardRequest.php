@@ -9,6 +9,7 @@ class CreateCardRequest extends AbstractRequest
 {
     public function getData()
     {
+        $this->validate('firstName', 'lastName', 'address', 'accountNumber');
         $data = [
             'firstName' => $this->getFirstName(),
             'lastName' => $this->getLastName(),
@@ -16,7 +17,7 @@ class CreateCardRequest extends AbstractRequest
             'bankAccounts' => [
                 [
                     'IBAN' => $this->getAccountNumber(),
-                    'name' => 'Tabster',
+                    'name' => 'Payconiq',
                 ],
             ],
         ];
@@ -26,6 +27,6 @@ class CreateCardRequest extends AbstractRequest
 
     public function getEndpoint()
     {
-        return parent::getEndpoint() . '/customers';
+        return parent::getEndpoint().'/customers';
     }
 }

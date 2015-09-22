@@ -34,6 +34,16 @@ class Gateway extends AbstractGateway
         return $this->setParameter('partnerId', $value);
     }
 
+    public function getKeyPath()
+    {
+        return $this->getParameter('keyPath');
+    }
+
+    public function setKeyPath($value)
+    {
+        return $this->setParameter('keyPath', $value);
+    }
+
     /**
      * @return string
      */
@@ -103,6 +113,15 @@ class Gateway extends AbstractGateway
     public function validateCard(array $parameters = [])
     {
         return $this->createRequest('\Omnipay\Payconiq\Message\ValidateCardRequest', $parameters);
+    }
+
+    /**
+     * @param array $parameters
+     * @return \Omnipay\Payconiq\Message\RegisterKeyRequest
+     */
+    public function registerKey(array $parameters = [])
+    {
+        return $this->createRequest('\Omnipay\Payconiq\Message\RegisterKeyRequest', $parameters);
     }
 
 }

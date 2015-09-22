@@ -9,16 +9,17 @@ use Guzzle\Common\Event;
 
 abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 {
-    /**
-     * Live or Test Endpoint URL
-     *
-     * @var string URL
-     */
+
     protected $endpoint = 'https://dev.payconiq.com/v1';
 
     public function setPartnerId($value)
     {
         return $this->setParameter('partnerId', $value);
+    }
+
+    public function getPartnerId()
+    {
+        return $this->getParameter('partnerId');
     }
 
     /**
@@ -29,6 +30,16 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
     public function setApiKey($value)
     {
         return $this->setParameter('apiKey', $value);
+    }
+
+    /**
+     * Get the gateway API Key
+     *
+     * @return string
+     */
+    public function getApiKey()
+    {
+        return $this->getParameter('apiKey');
     }
 
     public function getFirstName()
@@ -89,6 +100,32 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
     public function setAccountNumber($value)
     {
         return $this->setParameter('accountNumber', $value);
+    }
+
+    public function getPublicKey()
+    {
+        return $this->getParameter('publicKey');
+    }
+
+    public function setPublicKey($value)
+    {
+        return $this->setParameter('publicKey', $value);
+    }
+
+    public function getEndpoint()
+    {
+        return $this->endpoint.'/partners/'.$this->getPartnerId();
+    }
+
+
+    public function getKeyPath()
+    {
+        return $this->getParameter('keyPath');
+    }
+
+    public function setKeyPath($value)
+    {
+        return $this->setParameter('keyPath', $value);
     }
 
     public function send()
@@ -170,26 +207,6 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
     public function getHttpMethod()
     {
         return 'POST';
-    }
-
-    public function getEndpoint()
-    {
-        return $this->endpoint.'/partners/'.$this->getPartnerId();
-    }
-
-    public function getPartnerId()
-    {
-        return $this->getParameter('partnerId');
-    }
-
-    /**
-     * Get the gateway API Key
-     *
-     * @return string
-     */
-    public function getApiKey()
-    {
-        return $this->getParameter('apiKey');
     }
 
 

@@ -44,6 +44,6 @@ class PurchaseRequest extends AbstractRequest
 
     public function getEndpoint()
     {
-        return parent::getEndpoint().'/customers/'.$this->getCardReference().'/transactions';
+        return $this->getPartnerEndpoint().'/customers/'.$this->getCardReference().'/transactions';
     }
 }

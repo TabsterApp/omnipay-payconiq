@@ -16,7 +16,7 @@ class ValidateCardRequest extends AbstractRequest
 
     public function getEndpoint()
     {
-        return parent::getEndpoint().'/customers/'.
+        return $this->getPartnerEndpoint().'/customers/'.
         $this->getCardReference().'/bankAccounts/'.
         $this->getAccountNumber().'/validate';
     }

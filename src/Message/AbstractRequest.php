@@ -10,7 +10,7 @@ use Guzzle\Common\Event;
 abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 {
 
-    protected $endpoint = 'https://dev.payconiq.com/v1';
+    protected $endpoint = 'https://api.payconiq.com/v1';
 
     public function setPartnerId($value)
     {
@@ -112,9 +112,9 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
         return $this->setParameter('publicKey', $value);
     }
 
-    public function getEndpoint()
+    public function getPartnerEndpoint()
     {
-        return $this->endpoint.'/partners/'.$this->getPartnerId();
+        return $this->getEnvironmentEndPoint().'/partners/'.$this->getPartnerId();
     }
 
 
@@ -128,6 +128,16 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
         return $this->setParameter('keyPath', $value);
     }
 
+    public function getTestMode()
+    {
+        return $this->getParameter('testMode');
+    }
+
+    public function setTestMode($value)
+    {
+        return $this->setParameter('testMode', $value);
+    }
+
     public function send()
     {
         $data = $this->getData();
@@ -136,18 +146,13 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
     }
 
 
-    /**
-     * Gets the test mode of the request from the gateway.
-     *
-     * @return boolean
-     */
-    public function getTestMode()
+    public function getEnvironmentEndPoint()
     {
-        if ('https://dev.payconiq.com/v1' == $this->endpoint) {
-            return true;
+        if ($this->getTestMode()) {
+            $this->endpoint = 'https://dev.payconiq.com/v1';
         }
 
-        return false;
+        return $this->endpoint;
     }
 
 

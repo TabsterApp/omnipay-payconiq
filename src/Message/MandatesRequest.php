@@ -15,7 +15,7 @@ class MandatesRequest extends AbstractRequest
 
     public function getEndpoint()
     {
-        return $this->endpoint . '/mandates/' . $this->getMandateType();
+        return $this->getEnvironmentEndPoint().'/mandates/'.$this->getMandateType();
     }
 
     public function getHttpMethod()

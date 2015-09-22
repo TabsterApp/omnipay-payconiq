@@ -37,6 +37,6 @@ class RegisterKeyRequest extends AbstractRequest
 
     public function getEndpoint()
     {
-        return parent::getEndpoint().'/key';
+        return $this->getPartnerEndpoint().'/key';
     }
 }

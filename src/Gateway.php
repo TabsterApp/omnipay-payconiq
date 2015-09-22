@@ -44,6 +44,16 @@ class Gateway extends AbstractGateway
         return $this->setParameter('keyPath', $value);
     }
 
+    public function getTestMode()
+    {
+        return $this->getParameter('testMode');
+    }
+
+    public function setTestMode($value)
+    {
+        return $this->setParameter('testMode', $value);
+    }
+
     /**
      * @return string
      */

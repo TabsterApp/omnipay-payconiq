@@ -15,7 +15,7 @@ class FetchCardRequest extends AbstractRequest
 
     public function getEndpoint()
     {
-        return parent::getEndpoint() . '/customers/' . $this->getCardReference();
+        return $this->getPartnerEndpoint().'/customers/'.$this->getCardReference();
     }
 
     public function getHttpMethod()

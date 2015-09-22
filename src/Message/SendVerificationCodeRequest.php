@@ -15,6 +15,8 @@ class SendVerificationCodeRequest extends AbstractRequest
 
     public function getEndpoint()
     {
-        return parent::getEndpoint() . '/customers/' . $this->getCardReference() . '/sendVerificationCode';
+        return parent::getEndpoint().
+        '/customers/'.$this->getCardReference().'/bankAccounts/'.
+        $this->getAccountNumber().'/sendVerificationCode';
     }
 }

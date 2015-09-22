@@ -75,12 +75,16 @@ class Response extends AbstractResponse
     public function getCardStatus()
     {
         $data = $this->getData();
-        $cardStatus = $data['bankAccounts']['status'];
-        if (in_array($cardStatus, self::$CARD_STATUSES)) {
+
+        if (!isset($data['bankAccounts'][0]['status']) || in_array(
+                $data['bankAccounts'][0]['status'],
+                self::$CARD_STATUSES
+            )
+        ) {
             throw new InvalidResponseException('Invalid card status in response.');
         }
 
-        return self::$CARD_STATUSES[$cardStatus];
+        return self::$CARD_STATUSES[$data['bankAccounts'][0]['status']];
     }
 
     /**

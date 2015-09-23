@@ -18,7 +18,6 @@ class PurchaseRequest extends AbstractRequest
         $data = [
             'originId' => $this->getCardReference(),
             'originIBAN' => $this->getAccountNumber(),
-            'targetIBAN' => 'DE21200500000123456000',
             'amount' => $this->getAmountInteger(),
             'currency' => strtoupper($this->getCurrency()),
         ];
@@ -32,11 +31,11 @@ class PurchaseRequest extends AbstractRequest
     {
         //"<Base64 Encode(SHA256 Encrypt(concat(partnerId, customerId, optional originIban, amount, currency), private key)>"
         if (!$this->getKeyPath() || !file_exists($this->getKeyPath())) {
-            throw new BadMethodCallException('No private key found for Payconiq at '.$this->getKeyPath());
+            throw new BadMethodCallException('No private key found for Payconiq at ' . $this->getKeyPath());
         }
         $privateKey = file_get_contents($this->getKeyPath());
-        $hashString = $this->getPartnerId().$data['originId'].
-            $data['originIBAN'].$data['amount'].$data['currency'];
+        $hashString = $this->getPartnerId() . $data['originId'] .
+            $data['originIBAN'] . $data['amount'] . $data['currency'];
 
         return base64_encode(hash_hmac('sha256', $hashString, $privateKey));
 
@@ -44,6 +43,6 @@ class PurchaseRequest extends AbstractRequest
 
     public function getEndpoint()
     {
-        return $this->getPartnerEndpoint().'/customers/'.$this->getCardReference().'/transactions';
+        return $this->getPartnerEndpoint() . '/transactions';
     }
 }

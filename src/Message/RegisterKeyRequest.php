@@ -23,7 +23,7 @@ class RegisterKeyRequest extends AbstractRequest
         }
 
         $data = [];
-        $data['publicKey'] = $publicKey;
+        $data['value'] = $publicKey;
 
 
         return $data;

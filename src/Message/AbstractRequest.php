@@ -52,6 +52,16 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
         return $this->setParameter('firstName', $value);
     }
 
+    public function getPhoneNumber()
+    {
+        return $this->getParameter('phoneNumber');
+    }
+
+    public function setPhoneNumber($value)
+    {
+        return $this->setParameter('phoneNumber', $value);
+    }
+
     public function getMandateType()
     {
         return $this->getParameter('mandateType');
@@ -114,7 +124,7 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 
     public function getPartnerEndpoint()
     {
-        return $this->getEnvironmentEndPoint().'/partners/'.$this->getPartnerId();
+        return $this->getEnvironmentEndPoint() . '/partners/' . $this->getPartnerId();
     }
 
 
@@ -153,6 +163,11 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
         }
 
         return $this->endpoint;
+    }
+
+    public function getEndPoint()
+    {
+        return $this->getEnvironmentEndPoint();
     }
 
 

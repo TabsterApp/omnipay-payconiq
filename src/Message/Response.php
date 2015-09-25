@@ -134,4 +134,9 @@ class Response extends AbstractResponse
         return $this->data['mandateText'];
     }
 
+    public function getCode()
+    {
+        return $this->data['code'];
+    }
+
 }

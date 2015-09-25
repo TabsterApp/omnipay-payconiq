@@ -12,19 +12,9 @@ class RegisterKeyRequest extends AbstractRequest
 
     public function getData()
     {
-        $publicKey = '';
-        if ($this->getPublicKey()) {
-            $publicKey = $this->getPublicKey();
-        } else {
-            if (!$this->getKeyPath() || !file_exists($this->getKeyPath().'.pub')) {
-                throw new BadMethodCallException('No public key found for Payconiq at '.$this->getKeyPath().'.pub');
-            }
-            $publicKey = file_get_contents($this->getKeyPath().'.pub');
-        }
 
         $data = [];
-        $data['value'] = $publicKey;
-
+        $data['value'] = $this->generatePublicKeyString();
 
         return $data;
     }
@@ -38,5 +28,18 @@ class RegisterKeyRequest extends AbstractRequest
     public function getEndpoint()
     {
         return $this->getPartnerEndpoint().'/key';
+    }
+
+    private function generatePublicKeyString()
+    {
+        if (!$this->getKeyPath() || !file_exists($this->getKeyPath().'.pub')) {
+            throw new BadMethodCallException('No public key found for Payconiq at '.$this->getKeyPath().'.pub');
+        }
+
+        $file = file($this->getKeyPath().'.pub');
+        unset($file[0], $file[count($file) - 1]);
+
+        return implode('', $file);
+
     }
 }

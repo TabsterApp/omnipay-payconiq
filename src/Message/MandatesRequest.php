@@ -15,7 +15,7 @@ class MandatesRequest extends AbstractRequest
 
     public function getEndpoint()
     {
-        return $this->getEnvironmentEndPoint().'/mandates/'.$this->getMandateType();
+        return $this->getPartnerEndpoint().'/mandates/'.$this->getCardReference().'/bankAccounts/'.$this->getAccountNumber().'/mandate';
     }
 
     public function getHttpMethod()

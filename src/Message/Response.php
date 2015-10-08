@@ -131,12 +131,42 @@ class Response extends AbstractResponse
 
     public function getMandateText()
     {
-        return $this->data['mandateText'];
+        return $this->data['text'];
     }
 
     public function getMandateReference()
     {
         return $this->data['reference'];
+    }
+
+    public function getDebtorName()
+    {
+        return $this->data['debtorName'];
+    }
+
+    public function getDebtorIBAN()
+    {
+        return $this->data['debtorIBAN'];
+    }
+
+    public function getCreditorAddress()
+    {
+        return $this->data['creditorAddress'];
+    }
+
+    public function getDebtorAddress()
+    {
+        return $this->data['debtorAddress'];
+    }
+
+    public function getSignDate()
+    {
+        return $this->data['signDate'];
+    }
+
+    public function getReason()
+    {
+        return $this->data['reason'];
     }
 
     public function getCode()

@@ -16,7 +16,7 @@ class ConfirmMandatesRequest extends AbstractRequest
 
     public function getEndpoint()
     {
-        return $this->getPartnerEndpoint().'/mandates/'.$this->getCardReference(
+        return $this->getPartnerEndpoint().'/customers/'.$this->getCardReference(
         ).'/bankAccounts/'.$this->getAccountNumber().'/mandate/confirm';
     }
 

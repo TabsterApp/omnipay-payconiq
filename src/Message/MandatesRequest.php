@@ -27,7 +27,7 @@ class MandatesRequest extends AbstractRequest
     {
         return parent::sendData(
             $data,
-            true,
+            false,
             [
                 'Accept-Language' => 'EN',
             ]

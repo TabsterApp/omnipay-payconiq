@@ -102,6 +102,16 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
         return $this->setParameter('accountNumber', $value);
     }
 
+    public function getMandateType()
+    {
+        return $this->getParameter('mandateType');
+    }
+
+    public function setMandateType($value)
+    {
+        return $this->setParameter('mandateType', $value);
+    }
+
     public function getPartnerEndpoint()
     {
         return $this->getEnvironmentEndPoint() . '/partners/' . $this->getPartnerId();

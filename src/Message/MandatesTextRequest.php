@@ -1,11 +1,13 @@
 <?php
 /**
- * Payconiq Fetch Card Request
+ * Date: 08/10/15
+ * Time: 13:46
  */
 
 namespace Omnipay\Payconiq\Message;
 
-class MandatesRequest extends AbstractRequest
+
+class MandatesTextRequest extends AbstractRequest
 {
     public function getData()
     {
@@ -15,7 +17,7 @@ class MandatesRequest extends AbstractRequest
 
     public function getEndpoint()
     {
-        return $this->getPartnerEndpoint().'/customers/'.$this->getCardReference().'/bankAccounts/'.$this->getAccountNumber().'/mandate';
+        return $this->getEnvironmentEndPoint().'/mandates/'.$this->getMandateType();
     }
 
     public function getHttpMethod()

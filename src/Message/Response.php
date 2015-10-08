@@ -134,6 +134,11 @@ class Response extends AbstractResponse
         return $this->data['mandateText'];
     }
 
+    public function getMandateReference()
+    {
+        return $this->data['reference'];
+    }
+
     public function getCode()
     {
         return isset($this->data['code']) ? $this->data['code'] : null;

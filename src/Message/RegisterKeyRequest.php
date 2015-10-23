@@ -27,19 +27,17 @@ class RegisterKeyRequest extends AbstractRequest
 
     public function getEndpoint()
     {
-        return $this->getPartnerEndpoint().'/key';
+        return $this->getPartnerEndpoint() . '/key';
     }
 
     private function generatePublicKeyString()
     {
-        if (!$this->getKeyPath() || !file_exists($this->getKeyPath().'.pub')) {
-            throw new BadMethodCallException('No public key found for Payconiq at '.$this->getKeyPath().'.pub');
+        if (!$this->getKeyPath() || !file_exists($this->getKeyPath() . '.pub')) {
+            throw new BadMethodCallException('No public key found for Payconiq at ' . $this->getKeyPath() . '.pub');
         }
 
-        $file = file($this->getKeyPath().'.pub');
-        unset($file[0], $file[count($file) - 1]);
 
-        return implode('', $file);
+        return implode('', base64_encode(file_get_contents($this->getKeyPath() . '.pub')));
 
     }
 }

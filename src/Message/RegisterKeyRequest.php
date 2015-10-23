@@ -36,8 +36,10 @@ class RegisterKeyRequest extends AbstractRequest
             throw new BadMethodCallException('No public key found for Payconiq at ' . $this->getKeyPath() . '.pub');
         }
 
+        $file = file($this->getKeyPath() . '.pub');
+        unset($file[count($file) - 1], $file[0]);
 
-        return implode('', base64_encode(file_get_contents($this->getKeyPath() . '.pub')));
+        return implode('', $file);
 
     }
 }

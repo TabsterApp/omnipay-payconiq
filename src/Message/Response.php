@@ -169,6 +169,17 @@ class Response extends AbstractResponse
         return $this->data['reason'];
     }
 
+    public function getRemainingWeeklyTransactionCountLimit()
+    {
+        return $this->data['solvency']['remainingWeeklyTransactionCountLimit'];
+    }
+
+    public function getRemainingWeeklyTransactionAmountLimit()
+    {
+        return $this->data['solvency']['remainingWeeklyTransactionAmountLimit'];
+    }
+
+
     public function getCode()
     {
         return isset($this->data['code']) ? $this->data['code'] : null;

@@ -114,7 +114,7 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 
     public function getPartnerEndpoint()
     {
-        return $this->getEnvironmentEndPoint() . '/partners/' . $this->getPartnerId();
+        return $this->getEnvironmentEndPoint().'/partners/'.$this->getPartnerId();
     }
 
     public function getKeyPath()
@@ -159,6 +159,15 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
         return $this->getEnvironmentEndPoint();
     }
 
+    public function getLanguage()
+    {
+        return $this->getParameter('language');
+    }
+
+    public function setLanguage($value)
+    {
+        return $this->setParameter('language', $value);
+    }
 
     /**
      * @param array $data

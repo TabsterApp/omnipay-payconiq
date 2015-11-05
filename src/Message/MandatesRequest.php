@@ -15,7 +15,9 @@ class MandatesRequest extends AbstractRequest
 
     public function getEndpoint()
     {
-        return $this->getPartnerEndpoint().'/customers/'.$this->getCardReference().'/bankAccounts/'.$this->getAccountNumber().'/mandate';
+        return $this->getPartnerEndpoint().'/customers/'.
+        $this->getCardReference().'/bankAccounts/'.
+        $this->getAccountNumber().'/mandate';
     }
 
     public function getHttpMethod()
@@ -29,7 +31,7 @@ class MandatesRequest extends AbstractRequest
             $data,
             false,
             [
-                'Accept-Language' => 'EN',
+                'Accept-Language' => $this->getLanguage(),
             ]
         );
     }

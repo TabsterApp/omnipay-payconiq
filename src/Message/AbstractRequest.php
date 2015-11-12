@@ -94,12 +94,12 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 
     public function getAccountNumber()
     {
-        return $this->getParameter('accountNumber');
+        return strtoupper($this->getParameter('accountNumber'));
     }
 
     public function setAccountNumber($value)
     {
-        return $this->setParameter('accountNumber', $value);
+        return $this->setParameter('accountNumber', strtoupper($value));
     }
 
     public function getMandateType()

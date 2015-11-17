@@ -60,7 +60,7 @@ class Response extends AbstractResponse
         $location = $this->getLocationHeader();
         $transactionReference = preg_replace('#^.+?\/transactions\\/([^\/\s]+)#i', '$1', $location);
         if (empty($transactionReference) || strpos('/', $transactionReference) !== false) {
-            throw new InvalidResponseException('No transaction id header in response.');
+            throw new InvalidResponseException('No transaction reference header found in response.');
         }
 
         return $transactionReference;

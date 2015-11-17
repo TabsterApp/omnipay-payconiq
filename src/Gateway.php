@@ -145,6 +145,15 @@ class Gateway extends AbstractGateway
 
     /**
      * @param array $parameters
+     * @return \Omnipay\Payconiq\Message\FetchTransactionRequest
+     */
+    public function fetchTransaction(array $parameters = [])
+    {
+        return $this->createRequest('\Omnipay\Payconiq\Message\FetchTransactionRequest', $parameters);
+    }
+
+    /**
+     * @param array $parameters
      * @return \Omnipay\Payconiq\Message\RegisterKeyRequest
      */
     public function registerKey(array $parameters = [])

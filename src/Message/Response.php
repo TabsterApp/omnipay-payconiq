@@ -161,7 +161,7 @@ class Response extends AbstractResponse
 
     public function getSignDate()
     {
-        return $this->data['signDate'];
+        return isset($this->data['signDate']) ? $this->data['signDate'] : null;
     }
 
     public function getReason()

@@ -9,23 +9,12 @@ use Guzzle\Common\Event;
 
 abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 {
-
-    protected $endpoint = 'https://api.payconiq.com/v1';
-
-    public function setPartnerId($value)
-    {
-        return $this->setParameter('partnerId', $value);
-    }
-
-    public function getPartnerId()
-    {
-        return $this->getParameter('partnerId');
-    }
+    protected $endpoint = 'https://api.payconiq.com/v2';
 
     /**
      * Set the gateway API Key
      *
-     * @return AbstractRequest provides a fluent interface.
+     * @return \Omnipay\Common\Message\AbstractRequest provides a fluent interface.
      */
     public function setApiKey($value)
     {
@@ -42,111 +31,6 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
         return $this->getParameter('apiKey');
     }
 
-    public function getFirstName()
-    {
-        return $this->getParameter('firstName');
-    }
-
-    public function setFirstName($value)
-    {
-        return $this->setParameter('firstName', $value);
-    }
-
-    public function getPhoneNumber()
-    {
-        return $this->getParameter('phoneNumber');
-    }
-
-    public function setPhoneNumber($value)
-    {
-        return $this->setParameter('phoneNumber', $value);
-    }
-
-    public function getLastName()
-    {
-        return $this->getParameter('lastName');
-    }
-
-    public function setLastName($value)
-    {
-        return $this->setParameter('lastName', $value);
-    }
-
-    public function getAddress()
-    {
-        return $this->getParameter('address');
-    }
-
-    public function setAddress($value)
-    {
-        return $this->setParameter('address', $value);
-    }
-
-    public function getVerificationCode()
-    {
-        return $this->getParameter('verificationCode');
-    }
-
-    public function setVerificationCode($value)
-    {
-        return $this->setParameter('verificationCode', $value);
-    }
-
-    public function getAccountNumber()
-    {
-        return strtoupper($this->getParameter('accountNumber'));
-    }
-
-    public function setAccountNumber($value)
-    {
-        return $this->setParameter('accountNumber', strtoupper($value));
-    }
-
-    public function getMandateType()
-    {
-        return $this->getParameter('mandateType');
-    }
-
-    public function setMandateType($value)
-    {
-        return $this->setParameter('mandateType', $value);
-    }
-
-    public function getTransactionReference()
-    {
-        return $this->getParameter('transactionReference');
-    }
-
-    public function setTransactionReference($value)
-    {
-        return $this->setParameter('transactionReference', $value);
-    }
-
-    public function getPartnerEndpoint()
-    {
-        return $this->getEnvironmentEndPoint().'/partners/'.$this->getPartnerId();
-    }
-
-    public function getKeyPath()
-    {
-        return $this->getParameter('keyPath');
-    }
-
-    public function setKeyPath($value)
-    {
-        return $this->setParameter('keyPath', $value);
-    }
-
-    public function getTestMode()
-    {
-        return $this->getParameter('testMode');
-    }
-
-    public function setTestMode($value)
-    {
-        return $this->setParameter('testMode', $value);
-    }
-
     public function send()
     {
         $data = $this->getData();
@@ -154,11 +38,10 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
         return $this->sendData($data);
     }
 
-
     public function getEnvironmentEndPoint()
     {
         if ($this->getTestMode()) {
-            $this->endpoint = 'https://dev.payconiq.com/v1';
+            $this->endpoint = 'https://dev.payconiq.com/v2';
         }
 
         return $this->endpoint;
@@ -169,60 +52,31 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
         return $this->getEnvironmentEndPoint();
     }
 
-    public function getLanguage()
+    protected function sendRequest($method, $endpoint, $data = null)
     {
-        return $this->getParameter('language');
-    }
+        $this->httpClient->getEventDispatcher()->addListener('request.error', function (Event $event) {
+            /**
+             * @var \Guzzle\Http\Message\Response $response
+             */
+            $response = $event['response'];
 
-    public function setLanguage($value)
-    {
-        return $this->setParameter('language', $value);
-    }
-
-    /**
-     * @param array $data
-     * @return Response
-     */
-    public function sendData($data, $noAuthorization = false, $extraHeaders = [])
-    {
-        // don't throw exceptions for 4xx errors
-        $this->httpClient->getEventDispatcher()->addListener(
-            'request.error',
-            function (Event $event) {
-                /**
-                 * @var \Guzzle\Http\Message\Response $response
-                 */
-                $response = $event['response'];
-                if ($response->isClientError()) {
-                    $event->stopPropagation();
-                }
+            if ($response->isError()) {
+                $event->stopPropagation();
             }
-        );
-        $headers = [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ];
-        if (!$noAuthorization) {
-            $headers['Authorization'] = $this->getApiKey();
-        }
-        if (!empty($extraHeaders)) {
-            $headers += $extraHeaders;
-        }
+        });
+
         $httpRequest = $this->httpClient->createRequest(
-            $this->getHttpMethod(),
-            $this->getEndpoint(),
-            $headers,
-            !empty($data) ? json_encode($data) : null
+            $method,
+            $this->getEndPoint() . $endpoint,
+            [
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
+                'Authorization' => $this->getApiKey(),
+            ],
+            $data
         );
-        if ($this->getTestMode()) {
-            $httpRequest->getCurlOptions()->set(CURLOPT_SSL_VERIFYHOST, false);
-            $httpRequest->getCurlOptions()->set(CURLOPT_SSL_VERIFYPEER, false);
-        }
 
-        /** @var \Guzzle\Http\Message\Response $httpResponse */
-        $httpResponse = $httpRequest->send();
-
-        return $this->response = new Response($this, $httpResponse);
+        return $httpRequest->send();
     }
 
     /**
@@ -236,6 +90,4 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
     {
         return 'POST';
     }
-
-
 }

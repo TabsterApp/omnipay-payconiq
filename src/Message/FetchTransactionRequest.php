@@ -9,17 +9,22 @@ class FetchTransactionRequest extends AbstractRequest
 {
     public function getData()
     {
+        $this->validate('apiKey', 'transactionReference');
 
-        return [];
+        $data = [];
+        $data['transactionId'] = $this->getTransactionReference();
+
+        return $data;
     }
 
-    public function getEndpoint()
+    /**
+     * @param mixed $data
+     * @return FetchTransactionResponse
+     */
+    public function sendData($data)
     {
-        return $this->getPartnerEndpoint().'/transactions/'.$this->getTransactionReference();
-    }
+        $httpResponse = $this->sendRequest("GET", '/transactions/'.$this->getTransactionReference());
 
-    public function getHttpMethod()
-    {
-        return 'GET';
+        return $this->response = new FetchTransactionResponse($this, $httpResponse->json());
     }
 }

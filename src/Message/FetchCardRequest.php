@@ -1,11 +1,11 @@
 <?php
 /**
- * Payconiq Fetch Transaction Request
+ * Payconiq Fetch Card Request
  */
 
 namespace Omnipay\Payconiq\Message;
 
-class FetchTransactionRequest extends AbstractRequest
+class FetchCardRequest extends AbstractRequest
 {
     public function getData()
     {
@@ -15,7 +15,7 @@ class FetchTransactionRequest extends AbstractRequest
 
     public function getEndpoint()
     {
-        return $this->getPartnerEndpoint().'/transactions/'.$this->getTransactionReference();
+        return $this->getPartnerEndpoint().'/customers/'.$this->getCardReference();
     }
 
     public function getHttpMethod()
